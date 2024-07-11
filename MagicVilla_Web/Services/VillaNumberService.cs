@@ -12,7 +12,7 @@ namespace MagicVilla_Web.Services
         public VillaNumberService(IHttpClientFactory httpClientFactory, IConfiguration configuration) : base(httpClientFactory) 
         {
             _httpClientFactory = httpClientFactory;
-            villaUrl = configuration.GetValue<string>("ServicesUrls:VillaAPI");
+            villaUrl = configuration.GetValue<string>("ServiceUrls:VillaAPI");
         }
         public Task<T> CreateAsync<T>(VillaNumberCreateDTO dto)
         {
