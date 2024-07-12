@@ -14,6 +14,10 @@ namespace MagicVilla_VillaAPI.Models
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
 
+        [Timestamp]
+        public byte[] RowVersion { get; set; }
+
+
 
     }
 }

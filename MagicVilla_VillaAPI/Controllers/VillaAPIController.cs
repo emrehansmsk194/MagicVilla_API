@@ -80,7 +80,7 @@ namespace MagicVilla_VillaAPI.Controllers
             {
                 if (await _dbVilla.GetAsync(u => u.Name.ToLower() == createDTO.Name.ToLower()) != null)
                 {
-                    ModelState.AddModelError("", "Villa already exists !");
+                    ModelState.AddModelError("ErrorMessages", "Villa already exists !");
                     return BadRequest(ModelState);
                 }
                 if (createDTO == null)
@@ -158,7 +158,7 @@ namespace MagicVilla_VillaAPI.Controllers
             }
             return _response;
         }
-        [HttpPatch("{id:int}", Name = "UpdateVilla")]
+        [HttpPatch("{id:int}", Name = "UpdatePartialVilla")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> UpdatePartialVilla(int id,JsonPatchDocument<VillaUpdateDTO> patchDTO)

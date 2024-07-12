@@ -48,10 +48,30 @@ namespace MagicVilla_Web.Services
                 HttpResponseMessage apiResponse = null;
                 apiResponse = await client.SendAsync(message); // you can trace all the errors right here.
                 var apiContent = await apiResponse.Content.ReadAsStringAsync();
-                var APIResponse = JsonConvert.DeserializeObject<T>(apiContent);
-                return APIResponse;
-             
+                try
+                {
+                    APIResponse ApiResponse = JsonConvert.DeserializeObject<APIResponse>(apiContent);
+                    if(apiResponse.StatusCode == System.Net.HttpStatusCode.NotFound || apiResponse.StatusCode == System.Net.HttpStatusCode.BadRequest )
+                    {
+                        ApiResponse.StatusCode = System.Net.HttpStatusCode.BadRequest;
+                        ApiResponse.IsSuccess = false;
+                        var res = JsonConvert.SerializeObject(ApiResponse);
+                        var returnObj = JsonConvert.DeserializeObject<T>(res);
+                        return returnObj;
+                    }
                 }
+                catch (Exception ex)
+                {
+                    var exceptionResponse = JsonConvert.DeserializeObject<T>(apiContent);
+                    return exceptionResponse;
+                }
+                var APIResponse = JsonConvert.DeserializeObject<T> (apiContent);
+                return APIResponse;
+               
+
+
+
+            }
             catch (Exception e) {
                 var dto = new APIResponse
                 {

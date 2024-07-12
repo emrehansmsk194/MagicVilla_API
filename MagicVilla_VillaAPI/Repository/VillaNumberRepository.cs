@@ -1,6 +1,8 @@
 ﻿using MagicVilla_VillaAPI.Data;
 using MagicVilla_VillaAPI.Models;
 using MagicVilla_VillaAPI.Repository.IRepository;
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace MagicVilla_VillaAPI.Repository
 {
@@ -11,13 +13,14 @@ namespace MagicVilla_VillaAPI.Repository
         {
             _db = db;
         }
-        public async Task<VillaNumber> UpdateAsync(VillaNumber villaNumber)
+
+
+        public async Task<VillaNumber> UpdateAsync(VillaNumber entity)
         {
-            villaNumber.UpdatedDate = DateTime.Now;
-            _db.Numbers.Update(villaNumber);
+            entity.UpdatedDate = DateTime.Now;
+            _db.Numbers.Update(entity);
             await _db.SaveChangesAsync();
-            return villaNumber;
-           
+            return entity;
         }
     }
 }

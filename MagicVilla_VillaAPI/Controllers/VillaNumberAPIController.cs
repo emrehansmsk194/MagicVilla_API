@@ -3,6 +3,7 @@ using MagicVilla_VillaAPI.Models;
 using MagicVilla_VillaAPI.Models.Dto;
 using MagicVilla_VillaAPI.Repository.IRepository;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Net;
 
 namespace MagicVilla_VillaAPI.Controllers
@@ -84,12 +85,12 @@ namespace MagicVilla_VillaAPI.Controllers
             {
                 if(await _dbNumber.GetAsync(u => u.VillaNO == villaNumberDTO.VillaNo)!=null)
                 {
-                    ModelState.AddModelError("CustomError", "Villa Number Already Exists!");
+                    ModelState.AddModelError("ErrorMessages", "Villa Number Already Exists!");
                     return BadRequest(ModelState);
                 }
                 if(await _dbVilla.GetAsync(u => u.Id == villaNumberDTO.VillaID)==null)
                 {
-                    ModelState.AddModelError("CustomError", "Villa ID is invalid!");
+                    ModelState.AddModelError("ErrorMessages", "Villa ID is invalid!");
                     return BadRequest(ModelState);
                 }
 
@@ -146,39 +147,37 @@ namespace MagicVilla_VillaAPI.Controllers
 
 
         }
-        [HttpPut]
+        [HttpPut("{id:int}", Name = "UpdateVillaNumber")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> UpdateVillaNumber(int no, [FromBody] VillaNumberUpdateDTO villaNumberUpdateDTO)
+        public async Task<ActionResult<APIResponse>> UpdateVillaNumber(int id, [FromBody] VillaNumberUpdateDTO updateDTO)
         {
             try
             {
-                if (villaNumberUpdateDTO == null || no == 0)
+                if (updateDTO == null || id != updateDTO.VillaNo)
                 {
                     return BadRequest();
                 }
-                if (await _dbVilla.GetAsync(u => u.Id == villaNumberUpdateDTO.VillaID) == null)
+                if (await _dbVilla.GetAsync(u => u.Id == updateDTO.VillaID) == null)
                 {
-                    ModelState.AddModelError("CustomError", "Villa ID is invalid!");
+                    ModelState.AddModelError("ErrorMessages", "Villa ID is Invalid!");
                     return BadRequest(ModelState);
                 }
-                VillaNumber model = _mapper.Map<VillaNumber>(villaNumberUpdateDTO);
+                VillaNumber model = _mapper.Map<VillaNumber>(updateDTO);
+
                 await _dbNumber.UpdateAsync(model);
-                await _dbNumber.SaveAsync();
                 _response.StatusCode = HttpStatusCode.NoContent;
                 _response.IsSuccess = true;
                 return Ok(_response);
-
             }
             catch (Exception ex)
             {
                 _response.IsSuccess = false;
-                _response.ErrorMessages = new List<String>() { ex.ToString() };
+                _response.ErrorMessages
+                     = new List<string>() { ex.ToString() };
             }
             return _response;
         }
-
-
 
 
     }
