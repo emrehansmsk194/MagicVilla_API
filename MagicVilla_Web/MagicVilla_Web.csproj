@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Views\Shared\_Notification.cshtml" />
+    <Content Remove="Views\Shared\_Notification2.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,15 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <UpToDateCheckInput Remove="Views\Shared\_Notification.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Views\Shared\_Notification.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Views\Shared\_Notification.cshtml" />
+    <None Include="Views\Shared\_Notification2.cshtml" />
   </ItemGroup>
 
 </Project>

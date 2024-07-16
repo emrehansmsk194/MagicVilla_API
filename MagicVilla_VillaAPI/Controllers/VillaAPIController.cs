@@ -3,6 +3,7 @@ using MagicVilla_VillaAPI.Data;
 using MagicVilla_VillaAPI.Models;
 using MagicVilla_VillaAPI.Models.Dto;
 using MagicVilla_VillaAPI.Repository.IRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +25,10 @@ namespace MagicVilla_VillaAPI.Controllers
             this._response = new();
         }
         [HttpGet] // bir get istegi oldugunu belirttik.
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult<APIResponse>> GetVillas(){
             try
             {
@@ -40,6 +44,7 @@ namespace MagicVilla_VillaAPI.Controllers
             }
             return _response;
             }
+        [Authorize(Roles = "admin")]
         [HttpGet("{id:int}",Name = "GetVilla")] // id parametresi bekler.
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -106,6 +111,9 @@ namespace MagicVilla_VillaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [Authorize(Roles ="CUSTOM")]
         public async Task<ActionResult<APIResponse>> DeleteVilla(int id)
         {
             try
