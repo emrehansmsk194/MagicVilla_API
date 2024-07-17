@@ -48,7 +48,11 @@ builder.Services.AddAuthentication(x =>
             ValidateIssuer = false,
             ValidateAudience = false
         };
-    });
+    }); ;
+
+builder.Services.AddControllers(option => {
+    //option.ReturnHttpNotAcceptable=true;
+}).AddNewtonsoftJson().AddXmlDataContractSerializerFormatters();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>

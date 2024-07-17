@@ -18,23 +18,20 @@ builder.Services.AddSingleton<IHttpContextAccessor,HttpContextAccessor>();
 builder.Services.AddHttpClient<IAuthService, AuthService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddDistributedMemoryCache();
-
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+              .AddCookie(options =>
+              {
+                  options.Cookie.HttpOnly = true;
+                  options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+                  options.LoginPath = "/Auth/Login";
+                  options.AccessDeniedPath = "/Auth/AccessDenied";
+                  options.SlidingExpiration = true;
+              });
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(100);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
-
-
-});
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
-{
-    options.Cookie.HttpOnly = true; // JavaScript'in cookie'ye erismesini engeller. XSS saldirilarindan korur.
-    options.ExpireTimeSpan = TimeSpan.FromMinutes(30); // kullanici 30 dakika boyunca inaktif kalirsa yeniden kimlik dogrulama ister.
-    options.LoginPath = "/Auth/Login";
-    options.AccessDeniedPath = "/Auth/AccessDenied";
-    options.SlidingExpiration = true; // kullanici etkin kaldigi sürece cookie'nin suresi uzatilir.
-
 });
 
 var app = builder.Build();
