@@ -7,15 +7,14 @@ namespace MagicVilla_VillaAPI.Models
     {
         [Key,DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int VillaNO { get; set; }
-        [ForeignKey("Villa")]
+        [ForeignKey("VillaID")]
         public int VillaID { get; set; }
         public Villa Villa { get; set; }
         public string SpecialDetails { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
 
-        [Timestamp]
-        public byte[] RowVersion { get; set; }
+
 
 
 
